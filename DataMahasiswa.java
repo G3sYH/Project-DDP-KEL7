@@ -1,16 +1,12 @@
+import javax.swing.*;
 import java.util.*;
 
-public class DataMahasiswa {
+public class DataMahasiswaGUI {
 
     static Map<String, String[][]> dataKelas = new HashMap<>();
     static Map<String, String[]> dataByNIM = new HashMap<>();
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        // ========================================
-        // ========== DATA MAHASISWA ==============
-        // ========================================
 
         dataKelas.put("A", new String[][]{
                 {"1152511001","Aksay Nugraha","A"},
@@ -111,57 +107,65 @@ public class DataMahasiswa {
                 {"1152511090","Vanessa Ophira Pazya","C"}
         });
 
-        // Masukkan ke map NIM
         for (String kelas : dataKelas.keySet()) {
             for (String[] mhs : dataKelas.get(kelas)) {
                 dataByNIM.put(mhs[0], mhs);
             }
         }
 
-        // ========================================
-        // =============== MENU ===================
-        // ========================================
+        String menu = """
+                **** MENU DATA MAHASISWA ****
+                1. Cari berdasarkan kelas
+                2. Cari berdasarkan NIM
+                Pilih menu (1-2):
+                """;
 
-        System.out.println("===== MENU DATA MAHASISWA =====");
-        System.out.println("1. Cari berdasarkan kelas");
-        System.out.println("2. Cari berdasarkan NIM");
-        System.out.print("Pilihan anda: ");
-        int pilih = in.nextInt();
-        in.nextLine();
+        String pilihStr = JOptionPane.showInputDialog(null, menu, "Input", JOptionPane.QUESTION_MESSAGE);
+
+        if (pilihStr == null) return; // User cancel
+
+        int pilih = Integer.parseInt(pilihStr);
 
         if (pilih == 1) {
-            System.out.print("Masukkan kelas (A/B/C): ");
-            String kelas = in.nextLine().toUpperCase();
+            String kelas = JOptionPane.showInputDialog(null, "Masukkan kelas (A/B/C):").toUpperCase();
 
             if (!dataKelas.containsKey(kelas)) {
-                System.out.println("Kelas " + kelas + " tidak ada!");
+                JOptionPane.showMessageDialog(null, "Kelas " + kelas + " tidak ada!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            System.out.println("=== DATA KELAS " + kelas + " ===");
+            StringBuilder hasil = new StringBuilder("=== DATA KELAS " + kelas + " ===\n\n");
+
             for (String[] m : dataKelas.get(kelas)) {
-                System.out.println("NIM: " + m[0] + " | Nama: " + m[1] + " | Kelas: " + m[2]);
+                hasil.append("NIM: ").append(m[0])
+                     .append(" | Nama: ").append(m[1])
+                     .append(" | Kelas: ").append(m[2])
+                     .append("\n");
             }
+
+            JOptionPane.showMessageDialog(null, hasil.toString());
         }
 
         else if (pilih == 2) {
-            System.out.print("Masukkan NIM: ");
-            String nim = in.nextLine();
+            String nim = JOptionPane.showInputDialog(null, "Masukkan NIM:");
 
             if (!dataByNIM.containsKey(nim)) {
-                System.out.println("Mahasiswa tidak tersedia / NIM salah.");
+                JOptionPane.showMessageDialog(null, "Mahasiswa tidak tersedia / NIM salah.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String[] m = dataByNIM.get(nim);
-            System.out.println("=== DATA MAHASISWA ===");
-            System.out.println("NIM   : " + m[0]);
-            System.out.println("Nama  : " + m[1]);
-            System.out.println("Kelas : " + m[2]);
+
+            JOptionPane.showMessageDialog(null,
+                    "=== DATA MAHASISWA ===\n" +
+                            "NIM   : " + m[0] + "\n" +
+                            "Nama  : " + m[1] + "\n" +
+                            "Kelas : " + m[2]
+            );
         }
 
         else {
-            System.out.println("Opsi tidak ada!");
+            JOptionPane.showMessageDialog(null, "Menu tidak ada!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
